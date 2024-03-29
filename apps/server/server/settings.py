@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "djoser",
+    "accounts.apps.AccountsConfig",
+    "videos.apps.VideosConfig",
 ]
 
 MIDDLEWARE = [
