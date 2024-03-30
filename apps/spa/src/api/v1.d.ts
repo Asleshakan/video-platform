@@ -25,26 +25,13 @@ export interface paths {
     delete: operations["api_videos_destroy"];
     patch: operations["api_videos_partial_update"];
   };
-  "/auth/jwt/create/": {
-    /**
-     * @description Takes a set of user credentials and returns an access and refresh JSON web
-     * token pair to prove the authentication of those credentials.
-     */
-    post: operations["auth_jwt_create_create"];
+  "/auth/token/login/": {
+    /** @description Use this endpoint to obtain user authentication token. */
+    post: operations["auth_token_login_create"];
   };
-  "/auth/jwt/refresh/": {
-    /**
-     * @description Takes a refresh type JSON web token and returns an access type JSON web
-     * token if the refresh token is valid.
-     */
-    post: operations["auth_jwt_refresh_create"];
-  };
-  "/auth/jwt/verify/": {
-    /**
-     * @description Takes a token and indicates if it is valid.  This view provides no
-     * information about a token's fitness for a particular use.
-     */
-    post: operations["auth_jwt_verify_create"];
+  "/auth/token/logout/": {
+    /** @description Use this endpoint to logout user (remove user authentication token). */
+    post: operations["auth_token_logout_create"];
   };
   "/auth/users/": {
     get: operations["auth_users_list"];
@@ -150,18 +137,9 @@ export interface components {
        */
       new_username: string;
     };
-    TokenObtainPair: {
-      username: string;
-      password: string;
-      access: string;
-      refresh: string;
-    };
-    TokenRefresh: {
-      access: string;
-      refresh: string;
-    };
-    TokenVerify: {
-      token: string;
+    TokenCreate: {
+      password?: string;
+      username?: string;
     };
     User: {
       /**
@@ -424,63 +402,29 @@ export interface operations {
       };
     };
   };
-  /**
-   * @description Takes a set of user credentials and returns an access and refresh JSON web
-   * token pair to prove the authentication of those credentials.
-   */
-  auth_jwt_create_create: {
-    requestBody: {
+  /** @description Use this endpoint to obtain user authentication token. */
+  auth_token_login_create: {
+    requestBody?: {
       content: {
-        "application/json": components["schemas"]["TokenObtainPair"];
-        "application/x-www-form-urlencoded": components["schemas"]["TokenObtainPair"];
-        "multipart/form-data": components["schemas"]["TokenObtainPair"];
+        "application/json": components["schemas"]["TokenCreate"];
+        "application/x-www-form-urlencoded": components["schemas"]["TokenCreate"];
+        "multipart/form-data": components["schemas"]["TokenCreate"];
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["TokenObtainPair"];
+          "application/json": components["schemas"]["TokenCreate"];
         };
       };
     };
   };
-  /**
-   * @description Takes a refresh type JSON web token and returns an access type JSON web
-   * token if the refresh token is valid.
-   */
-  auth_jwt_refresh_create: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TokenRefresh"];
-        "application/x-www-form-urlencoded": components["schemas"]["TokenRefresh"];
-        "multipart/form-data": components["schemas"]["TokenRefresh"];
-      };
-    };
+  /** @description Use this endpoint to logout user (remove user authentication token). */
+  auth_token_logout_create: {
     responses: {
+      /** @description No response body */
       200: {
-        content: {
-          "application/json": components["schemas"]["TokenRefresh"];
-        };
-      };
-    };
-  };
-  /**
-   * @description Takes a token and indicates if it is valid.  This view provides no
-   * information about a token's fitness for a particular use.
-   */
-  auth_jwt_verify_create: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TokenVerify"];
-        "application/x-www-form-urlencoded": components["schemas"]["TokenVerify"];
-        "multipart/form-data": components["schemas"]["TokenVerify"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["TokenVerify"];
-        };
+        content: never;
       };
     };
   };

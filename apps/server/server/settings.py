@@ -126,10 +126,6 @@ SPECTACULAR_SETTINGS = {
     # OTHER SETTINGS
 }
 
-DJOSER = {
-    "LOGIN_FIELD": "email",
-}
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
