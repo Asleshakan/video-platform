@@ -126,8 +126,9 @@ SPECTACULAR_SETTINGS = {
     # OTHER SETTINGS
 }
 
-SIMPLE_JWT = {"AUTH_HEADER_TYPES": ("JWT",)}
-
+DJOSER = {
+    "LOGIN_FIELD": "email",
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
