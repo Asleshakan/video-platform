@@ -14,6 +14,16 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue')
     },
     {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('../views/PasswordResetView.vue')
+    },
+    {
+      path: '/password-reset-confirm/:uid/:token',
+      name: 'reset-password',
+      component: () => import('../views/NewPasswordView.vue')
+    },
+    {
       path: '/',
       name: 'home',
       component: () => import('../views/HomeView.vue'),
@@ -34,7 +44,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('token_video_platform_7348734') !== null
-  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
     next({ name: 'login' })
   } else {
     next()
