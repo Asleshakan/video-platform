@@ -83,6 +83,51 @@ export interface components {
       uid: string;
       token: string;
     };
+    PaginatedUserList: {
+      /** @example 123 */
+      count: number;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=400&limit=100
+       */
+      next?: string | null;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=200&limit=100
+       */
+      previous?: string | null;
+      results: components["schemas"]["User"][];
+    };
+    PaginatedUserModelList: {
+      /** @example 123 */
+      count: number;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=400&limit=100
+       */
+      next?: string | null;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=200&limit=100
+       */
+      previous?: string | null;
+      results: components["schemas"]["UserModel"][];
+    };
+    PaginatedVideoList: {
+      /** @example 123 */
+      count: number;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=400&limit=100
+       */
+      next?: string | null;
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=200&limit=100
+       */
+      previous?: string | null;
+      results: components["schemas"]["Video"][];
+    };
     PasswordResetConfirm: {
       uid: string;
       token: string;
@@ -207,10 +252,18 @@ export type external = Record<string, never>;
 export interface operations {
 
   api_users_list: {
+    parameters: {
+      query?: {
+        /** @description Number of results to return per page. */
+        limit?: number;
+        /** @description The initial index from which to return the results. */
+        offset?: number;
+      };
+    };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["UserModel"][];
+          "application/json": components["schemas"]["PaginatedUserModelList"];
         };
       };
     };
@@ -305,10 +358,18 @@ export interface operations {
     };
   };
   api_videos_list: {
+    parameters: {
+      query?: {
+        /** @description Number of results to return per page. */
+        limit?: number;
+        /** @description The initial index from which to return the results. */
+        offset?: number;
+      };
+    };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["Video"][];
+          "application/json": components["schemas"]["PaginatedVideoList"];
         };
       };
     };
@@ -429,10 +490,18 @@ export interface operations {
     };
   };
   auth_users_list: {
+    parameters: {
+      query?: {
+        /** @description Number of results to return per page. */
+        limit?: number;
+        /** @description The initial index from which to return the results. */
+        offset?: number;
+      };
+    };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["User"][];
+          "application/json": components["schemas"]["PaginatedUserList"];
         };
       };
     };
