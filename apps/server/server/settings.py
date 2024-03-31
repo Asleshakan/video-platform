@@ -171,6 +171,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATIC_ROOT = BASE_DIR / "static"
+
 DEFAULT_FILE_STORAGE = config(
     "DEFAULT_FILE_STORAGE", default=global_settings.DEFAULT_FILE_STORAGE
 )
