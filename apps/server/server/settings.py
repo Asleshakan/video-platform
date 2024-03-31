@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-import environ
-import os
+from email.policy import default
+from decouple import config
+from google.oauth2 import service_account
 
 from pathlib import Path
+
+from django.conf import global_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-g8khpcexyyb0q@p40^d5#r_j#ezf%(-90r-y^2@x1)2$wpch9+"
+SECRET_KEY = config(
+    "SECRET_KEY",
+    default="django-insecure-g8khpcexyyb0q@p40^d5#r_j#ezf%(-90r-y^2@x1)2$wpch9+",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = []
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 
 # Application definition
@@ -41,12 +52,18 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "djoser"
+    "rest_framework.authtoken",
+    "djoser",
+    "corsheaders",
+    "drf_spectacular",
+    "accounts.apps.AccountsConfig",
+    "videos.apps.VideosConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -104,6 +121,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",  # simple cmd line tools can access the API
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100,
+}
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Video API",
+    "DESCRIPTION": "Amalitech Video API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
+
+DJOSER = {"PASSWORD_RESET_CONFIRM_URL": "password-reset-confirm/{uid}/{token}"}
+
+EMAIL_HOST = config("EMAIL_HOST", default="localhost")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=25, cast=int)
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -121,6 +164,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+DEFAULT_FILE_STORAGE = config(
+    "DEFAULT_FILE_STORAGE", default=global_settings.DEFAULT_FILE_STORAGE
+)
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    BASE_DIR / "serviceaccount.json"
+)
+
+GS_BUCKET_NAME = config("GS_BUCKET_NAME", default="")
+GS_DEFAULT_ACL = config("GS_DEFAULT_ACL", default="")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
