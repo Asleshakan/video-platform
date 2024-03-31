@@ -3,7 +3,7 @@ import type { paths } from './v1'
 
 const BASE_URL = import.meta.env.DEV
   ? 'http://127.0.0.1:8000'
-  : 'http://amalitechvideoplatform.pythonanywhere.com'
+  : 'https://amalitechvideoplatform.pythonanywhere.com'
 
 export const client = localStorage.getItem('token_video_platform_7348734')
   ? createClient<paths>({
