@@ -24,6 +24,25 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Create settings.ini file
+        run: |
+          echo "ALLOWED_HOST = ${{ secrets.ALLOWED_HOST }}" >> settings.ini
+          echo "SECRET_KEY = ${{ secrets.SECRET_KEY }}" >> settings.ini
+          echo "DB_NAME = ${{ secrets.DBNAME }}" >> settings.ini
+          echo "DB_USER = ${{ secrets.DBUSER }}" >> settings.ini
+          echo "DB_PASSWORD = ${{ secrets.DBPASSWORD }}" >> settings.ini
+          echo "DB_ENGINE = ${{ secrets.DB_ENGINE }}" >> settings.ini
+          echo "DB_HOST = ${{ secrets.DBHOST }}" >> settings.ini
+          echo "DB_PORT = ${{ secrets.DBPORT }}" >> settings.ini
+          echo "DEFAULT_FILE_STORAGE = ${{ secrets.DEFAULT_FILE_STORAGE }}" >> settings.ini
+          echo "EMAIL_HOST = ${{ secrets.EMAIL_HOST }}" >> settings.ini
+          echo "EMAIL_PORT = ${{ secrets.EMAIL_PORT }}" >> settings.ini
+          echo "EMAIL_HOST_USER = ${{ secrets.EMAIL_HOST_USER }}" >> settings.ini
+          echo "EMAIL_HOST_PASSWORD = ${{ secrets.EMAIL_HOST_PASSWORD }}" >> settings.ini
+          echo "GS_BUCKET_NAME = ${{ secrets.EMAIL_HOST_PASSWORD }}" >> settings.ini
+          echo "GS_DEFAULT_ACL = ${{ secrets.GS_DEFAULT_ACL }}" >> settings.ini
+        shell: bash
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
