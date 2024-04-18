@@ -44,7 +44,7 @@ jobs:
           echo "EMAIL_HOST_PASSWORD = ${{ secrets.EMAIL_HOST_PASSWORD }}" >> settings.ini
           echo "GS_BUCKET_NAME = ${{ secrets.EMAIL_HOST_PASSWORD }}" >> settings.ini
           echo "GS_DEFAULT_ACL = ${{ secrets.GS_DEFAULT_ACL }}" >> settings.ini
-          echo "${{secrets.GS_SERVICE_ACCOUNT}}" >> serviceaccount.json
+          echo '${{secrets.GS_SERVICE_ACCOUNT}}' >> serviceaccount.json
         shell: bash
 
       - name: Create and start virtual environment
