@@ -28,6 +28,7 @@ jobs:
 
       - name: Create settings.ini file
         run: |
+          echo [settings] >> settings.ini
           echo "ALLOWED_HOSTS = ${{ secrets.ALLOWED_HOSTS }}" >> settings.ini
           echo "SECRET_KEY = ${{ secrets.SECRET_KEY }}" >> settings.ini
           echo "DB_NAME = ${{ secrets.DBNAME }}" >> settings.ini
