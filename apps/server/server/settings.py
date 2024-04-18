@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from decouple import config
+from os import environ
 from google.oauth2 import service_account
 
 from pathlib import Path
@@ -33,8 +34,12 @@ SECRET_KEY = config(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")], default=[]
+ALLOWED_HOSTS = (
+    [environ["WEBSITE_HOSTNAME"]]
+    if "WEBSITE_HOSTNAME" in environ
+    else config(
+        "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")], default=[]
+    )
 )
 
 CORS_ALLOWED_ORIGINS = config(
@@ -64,6 +69,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -173,6 +179,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATIC_ROOT = BASE_DIR / "static"
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_FILE_STORAGE = config(
     "DEFAULT_FILE_STORAGE", default=global_settings.DEFAULT_FILE_STORAGE
