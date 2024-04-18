@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from calendar import c
 from decouple import config
 from google.oauth2 import service_account
 
